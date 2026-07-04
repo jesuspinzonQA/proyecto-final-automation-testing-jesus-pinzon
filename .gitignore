@@ -2,3 +2,11 @@ __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
+__pycache__/
+.pytest_cache/
+.deps/
+.venv/
+*.pyc
+logs/*.log
+screenshots/*.png
+Reports/*.html

@@ -1,0 +1,31 @@
+{
+  "valid_users": [
+    {
+      "case_id": "standard_user_login",
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    {
+      "case_id": "performance_user_login",
+      "username": "performance_glitch_user",
+      "password": "secret_sauce"
+    }
+  ],
+  "invalid_users": [
+    {
+      "case_id": "invalid_password",
+      "username": "standard_user",
+      "password": "wrong_password",
+      "expected_error": "Username and password do not match"
+    }
+  ],
+  "checkout": {
+    "first_name": "Jesus",
+    "last_name": "Pinzon",
+    "postal_code": "110111"
+  },
+  "products": [
+    "Sauce Labs Backpack",
+    "Sauce Labs Bike Light"
+  ]
+}

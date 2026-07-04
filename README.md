@@ -1,93 +1,176 @@
-# Proyecto de Automatización - SauceDemo
+# Proyecto Final Automation Testing - Jesus Pinzon
 
-## Descripción
+Framework de automatizacion de pruebas UI y API desarrollado como entrega final del curso de QA Automation.
 
-Este proyecto automatiza pruebas funcionales sobre el sitio web:
+El proyecto valida flujos completos sobre [SauceDemo](https://www.saucedemo.com/) con Selenium WebDriver y prueba endpoints publicos de [JSONPlaceholder](https://jsonplaceholder.typicode.com/) con Requests.
 
-https://www.saucedemo.com/
+## Tecnologias utilizadas
 
-Se utiliza Selenium WebDriver con Python y Pytest para validar el flujo de login, navegación por inventario y agregado de productos al carrito.
-
-## Tecnologías utilizadas
-
-- Python
+- Python 3.11+
 - Pytest
 - Selenium WebDriver
-- WebDriver Manager
-- Google Chrome
+- Requests
+- Pytest HTML
+- GitHub Actions
+
+## Alcance de pruebas
+
+### UI - SauceDemo
+
+La suite UI implementa Page Object Model y cubre:
+
+1. Login exitoso con usuarios validos parametrizados desde JSON.
+2. Login negativo con credenciales invalidas.
+3. Validacion de inventario, productos visibles y controles principales.
+4. Ordenamiento de productos por nombre descendente.
+5. Agregado de productos al carrito.
+6. Checkout completo de un producto.
+
+Los datos de prueba se leen desde `data/ui_test_data.json`.
+
+### API - JSONPlaceholder
+
+La suite API cubre:
+
+1. `GET /posts/1` con validacion de codigo de estado, estructura y contenido.
+2. `GET /invalid-endpoint` para validar escenario de error 404.
+3. `POST /posts` con validacion del recurso creado.
+4. `DELETE /posts/1` con validacion de respuesta exitosa.
 
 ## Estructura del proyecto
 
-proyecto_saucedemo/
-│
-├── utils/
-│   └── helpers.py
-│
+```text
+.
+├── .github/workflows/automation-tests.yml
+├── data/
+│   └── ui_test_data.json
+├── logs/
+├── pages/
+│   ├── base_page.py
+│   ├── cart_page.py
+│   ├── checkout_page.py
+│   ├── inventory_page.py
+│   └── login_page.py
+├── Reports/
+├── screenshots/
 ├── tests/
-│   └── test_saucedemo.py
-│
+│   ├── test_api_jsonplaceholder.py
+│   └── test_ui_saucedemo.py
+├── utils/
+│   └── data_loader.py
 ├── conftest.py
+├── pytest.ini
 ├── requirements.txt
 └── README.md
+```
 
-## Archivos principales
+## Instalacion
 
-### conftest.py
+Clonar el repositorio:
 
-Contiene la fixture `driver`, encargada de iniciar y cerrar el navegador.
+```bash
+git clone https://github.com/jesuspinzonQA/proyecto-final-automation-testing-jesus-pinzon.git
+cd proyecto-final-automation-testing-jesus-pinzon
+```
 
-### utils/helpers.py
+Crear y activar un entorno virtual:
 
-Contiene funciones auxiliares reutilizables:
+```bash
+python -m venv .venv
+```
 
-- `login()`: realiza el inicio de sesión.
-- `obtener_primer_producto()`: obtiene datos del primer producto visible.
+En Windows:
 
-### tests/test_saucedemo.py
+```bash
+.venv\Scripts\activate
+```
 
-Contiene los casos de prueba automatizados:
+En macOS/Linux:
 
-1. Login exitoso.
-2. Validación de la página de inventario.
-3. Agregado de producto al carrito.
-
-## Credenciales utilizadas
-
-Usuario:
-
-standard_user
-
-Contraseña:
-
-secret_sauce
-
-## Casos de prueba cubiertos
-
-### Login
-
-- Navega a la página de login.
-- Ingresa usuario y contraseña válidos.
-- Valida redirección a `/inventory.html`.
-- Valida título `Products`.
-- Valida logo `Swag Labs`.
-
-### Inventario
-
-- Verifica que el título sea correcto.
-- Valida que existan productos visibles.
-- Lista nombre y precio del primer producto.
-- Valida presencia de menú, filtro y carrito.
-
-### Carrito
-
-- Agrega el primer producto visible.
-- Verifica que el contador del carrito sea `1`.
-- Navega al carrito.
-- Comprueba que el producto agregado esté presente.
-
-## Instalación
+```bash
+source .venv/bin/activate
+```
 
 Instalar dependencias:
 
 ```bash
 pip install -r requirements.txt
+```
+
+## Ejecucion de pruebas
+
+Ejecutar toda la suite:
+
+```bash
+pytest
+```
+
+Ejecutar solo pruebas UI:
+
+```bash
+pytest -m ui
+```
+
+Ejecutar solo pruebas API:
+
+```bash
+pytest -m api
+```
+
+Ejecutar UI en modo headless:
+
+```bash
+pytest -m ui --headless
+```
+
+## Reportes y evidencias
+
+La configuracion de `pytest.ini` genera automaticamente un reporte HTML en:
+
+```text
+Reports/reporte.html
+```
+
+El reporte muestra:
+
+- Tests ejecutados.
+- Estado de cada test.
+- Duracion.
+- Detalle de errores.
+- Screenshots embebidos cuando falla una prueba UI.
+
+Las capturas de pantalla tambien se guardan en:
+
+```text
+screenshots/
+```
+
+El nombre de cada captura incluye el nombre del test y fecha/hora de ejecucion.
+
+## Logging
+
+La ejecucion registra pasos clave en:
+
+```text
+logs/automation.log
+logs/pytest.log
+```
+
+Estos logs ayudan a depurar flujos, datos usados y errores durante la ejecucion.
+
+## CI/CD
+
+El workflow `.github/workflows/automation-tests.yml` ejecuta las pruebas automaticamente en GitHub Actions cuando se realiza un push o pull request hacia `main` o `master`.
+
+Al finalizar, publica como artefactos:
+
+- `Reports/`
+- `screenshots/`
+- `logs/`
+
+## Notas de mantenimiento
+
+- Los Page Objects viven en `pages/`.
+- Los tests no contienen selectores directos de Selenium.
+- Los datos variables se ubican en `data/`.
+- Cada prueba usa una instancia independiente del navegador para evitar dependencias entre tests.
